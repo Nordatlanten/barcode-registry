@@ -1,2 +1,3 @@
-# barcode-registry
-A webapp for storing and editing product entries through their barcode.
+# Barcode Regitry
+
+This will be a dockerized webapp for storing and editing product entries through their barcode.
