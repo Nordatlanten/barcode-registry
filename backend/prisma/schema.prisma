@@ -11,12 +11,13 @@ datasource db {
 }
 
 model Product {
-  id         Int        @id @default(autoincrement())
-  name       String     @unique
-  barcode    String     @unique
-  price      Int
-  categories Category[]
-  deals      Deal[]
+  id            Int           @id @default(autoincrement())
+  name          String        @unique
+  barcode       String        @unique
+  price         Int
+  categories    Category[]
+  subcategories Subcategory[]
+  deals         Deal[]
 }
 
 model Category {
@@ -27,17 +28,17 @@ model Category {
 }
 
 model Subcategory {
-  id          Int      @id @default(autoincrement())
-  title       String   @unique
-  category    Category @relation(fields: [categoryInt], references: [int])
+  id          Int       @id @default(autoincrement())
+  title       String    @unique
+  category    Category  @relation(fields: [categoryInt], references: [int])
   categoryInt Int
+  Product     Product[]
 }
 
 model Deal {
-  id          Int     @id @default(autoincrement())
-  description String  @unique
+  id          Int       @id @default(autoincrement())
+  description String    @unique
   amount      Int
   total       Int
-  products    Product @relation(fields: [productId], references: [id])
-  productId   Int
+  products    Product[]
 }
