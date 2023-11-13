@@ -16,9 +16,9 @@ const app = express()
 app.use(express.json())
 app.use(cors(options))
 
-type Product = Prisma.ProductGetPayload<{ include: { categories: true, deals: true } }>;
-type Category = Prisma.CategoryGetPayload<{ include: { subcategories: true } }>;
-type Deal = Prisma.DealGetPayload<{ include: { products: true } }>;
+type Product = Prisma.ProductGetPayload<{ include: { categories: true, subcategories: true, deals: true}}>;
+type Category = Prisma.CategoryGetPayload<{ include: { products: true, subcategories: true }}>;
+type Deal = Prisma.DealGetPayload<{ include: { products: true }}>;
 
 
 // interface Product {
