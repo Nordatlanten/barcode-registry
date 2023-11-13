@@ -100,6 +100,10 @@ app.post('/product', async (req, res) => {
     const { name, barcode, price } = req.body as Product
     const categories: Category[] = req.body.categories ? req.body.categories : []
     const deals: Deal[] = req.body.deals ? req.body.deals : []
+    // prisma.product.deleteMany();
+    // prisma.category.deleteMany();
+    // prisma.subcategory.deleteMany();
+    // prisma.deal.deleteMany();
 
     const newProduct = await prisma.$transaction(async (trans) => {
       var newProduct;
@@ -158,13 +162,20 @@ app.post('/product', async (req, res) => {
 
           },
           deals: {
-            set: deals.map((deal) => {
+            connectOrCreate: deals.map((deal) => {
               return {
-                description: deal.description,
-                amount: deal.amount,
-                total: deal.total
+                where: {description: deal.description},
+                create: {description: deal.description, amount: deal.amount,total: deal.total}
               }
             })
+            
+            // set: deals.map((deal) => {
+            //   return {
+            //     description: deal.description,
+            //     amount: deal.amount,
+            //     total: deal.total
+            //   }
+            // })
           }
         },
         include: {
@@ -178,7 +189,7 @@ app.post('/product', async (req, res) => {
       })
       return newProduct;
     });
-    console.log(newProduct)
+    console.log(JSON.stringify(newProduct))
 
 
     //  var categoriesDb = [];
