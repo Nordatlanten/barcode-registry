@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 import './App.scss'
 
@@ -40,6 +40,9 @@ function App() {
   // const [deals, setDeals] = useState<Deal[]>([])
   const [foundCategories, setFoundCategories] = useState<Category[]>([])
 
+
+  const textInputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
 
     const getCategories = async () => {
@@ -58,8 +61,8 @@ function App() {
 
   const handleChange = async (string: string) => {
     console.log(string.length)
+    setBarcode(string)
     if (string.length === 8 || string.length === 13) {
-      setBarcode(string)
       clearTimeout(timer)
       setTimer(
         setTimeout(async () => {
@@ -96,6 +99,13 @@ function App() {
         'Content-Type': 'application/json'
       }
     })
+    setName("")
+    setPrice("")
+    setBarcode("")
+    setCategories([])
+    setSelectedCategory("")
+    setShowNewProductForm(false)
+    if (textInputRef.current) textInputRef.current.focus()
     console.log(result)
   }
 
@@ -105,14 +115,14 @@ function App() {
       <h1>Barcode Registry</h1>
       <div className='app-content'>
         <div className='app-content__left-column'>
-          <p>barcode: {barcode}</p>
-          <input onChange={e => handleChange(e.target.value)} />
+          <input ref={textInputRef} autoFocus value={barcode} onChange={e => handleChange(e.target.value)} />
+          <button onClick={() => { setBarcode(""); setFoundProduct(null); if (textInputRef.current) textInputRef.current.focus() }}>Rensa</button>
         </div>
         <div className="app-content__right-column">
           {foundProduct &&
             <div className='app-content__product'>
               <h2>{foundProduct.name}</h2>
-              <p>Pris: {foundProduct.price}</p>
+              <p>Pris: {foundProduct.price}&nbsp;kr</p>
               {foundProduct.categories.length > 0 &&
                 <>
                   <p>Kategorier:</p>
@@ -154,15 +164,14 @@ function App() {
             <form className='app-content__form' onSubmit={(e) => postNewProduct(e)}>
               <div className='app-content__form-content'>
                 <div className='app-content__form-left'>
-                  <p>Streckkod: {barcode}</p>
                   <label>
                     <span>produktnamn</span>
-                    <input type="text" onChange={e => setName(e.target.value)} />
+                    <input value={name} type="text" onChange={e => setName(e.target.value)} />
                     <p>(valt namn: {name})</p>
                   </label>
                   <label>
                     <span>price in sek</span>
-                    <input type="number" onChange={e => setPrice(e.target.value)} />
+                    <input value={price} type="number" onChange={e => setPrice(e.target.value)} />
                     <p>(valt pris: {price})</p>
                   </label>
                 </div>
