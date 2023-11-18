@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsx watch script.ts"
+    "start": "tsx watch script.ts",
+    "prisma-init": "npx prisma db push --force-reset && npx prisma db seed && npx prisma generate"
   },
   "keywords": [],
   "author": "",
