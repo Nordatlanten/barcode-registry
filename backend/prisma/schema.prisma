@@ -11,28 +11,30 @@ datasource db {
 }
 
 model Product {
-  id            Int           @id @default(autoincrement())
-  name          String        @unique
-  barcode       String        @unique
-  price         Int
-  categories    Category[]
-  subcategories Subcategory[]
-  deals         Deal[]
+  id             Int         @id @default(autoincrement())
+  name           String      @unique
+  barcode        String      @unique
+  price          Int
+  category       Category    @relation(fields: [categoryId], references: [id]) //categories    Category[]
+  categoryId     Int         @unique
+  subcategory    Subcategory @relation(fields: [subcategoryInt], references: [id]) //subcategories Subcategory[]
+  subcategoryInt Int         @unique
+  deals          Deal[]
 }
 
 model Category {
-  int           Int           @id @default(autoincrement())
+  id            Int           @id @default(autoincrement())
   title         String        @unique
   products      Product[]
   subcategories Subcategory[]
 }
 
 model Subcategory {
-  id          Int       @id @default(autoincrement())
-  title       String    @unique
-  category    Category  @relation(fields: [categoryInt], references: [int])
-  categoryInt Int
-  Product     Product[]
+  id         Int       @id @default(autoincrement())
+  title      String    @unique
+  category   Category  @relation(fields: [categoryId], references: [id])
+  categoryId Int       @unique
+  Product    Product[]
 }
 
 model Deal {
@@ -41,4 +43,5 @@ model Deal {
   amount      Int
   total       Int
   products    Product[]
+  filter      String
 }
