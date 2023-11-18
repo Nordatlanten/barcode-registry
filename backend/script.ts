@@ -1,5 +1,5 @@
 //import { PrismaClient } from "@prisma/client";
-import { Subcategory, Prisma, PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 import express from 'express'
 import cors from 'cors'
@@ -16,9 +16,11 @@ const app = express()
 app.use(express.json())
 app.use(cors(options))
 
-type Product = Prisma.ProductGetPayload<{ include: { categories: true, subcategories: true, deals: true}}>;
-type Category = Prisma.CategoryGetPayload<{ include: { products: true, subcategories: true }}>;
-type Deal = Prisma.DealGetPayload<{ include: { products: true }}>;
+type Product = Prisma.ProductGetPayload<{ include: { category: true, subcategory: true, deals: true } }>;
+type Category = Prisma.CategoryGetPayload<{ include: { products: true, subcategories: true } }>;
+type Subcategory = Prisma.SubcategoryGetPayload<{ include: { products: true, category: true } }>;
+type Deal = Prisma.DealGetPayload<{ include: { products: true } }>;
+
 
 
 // interface Product {
@@ -53,11 +55,8 @@ type Deal = Prisma.DealGetPayload<{ include: { products: true }}>;
 app.get('/products', async (_req, res) => {
   const allProducts = await prisma.product.findMany({
     include: {
-      categories: {
-        include: {
-          subcategories: true
-        }
-      },
+      category: true,
+      subcategory: true,
       deals: true
     }
   })
@@ -71,11 +70,8 @@ app.get('/products/:barcode', async (req, res) => {
       barcode: req.params.barcode
     },
     include: {
-      categories: {
-        include: {
-          subcategories: true
-        }
-      },
+      category: true,
+      subcategory: true,
       deals: true
     }
   }))
@@ -98,15 +94,37 @@ app.post('/product', async (req, res) => {
   try {
     console.log(req.body)
     const { name, barcode, price } = req.body as Product
-    const categories: Category[] = req.body.categories ? req.body.categories : []
+    const category: string = req.body.category
+    const subcategory: string = req.body.subcategory
+    //const categories: Category[] = req.body.categories ? req.body.categories : []
     const deals: Deal[] = req.body.deals ? req.body.deals : []
-    // prisma.product.deleteMany();
-    // prisma.category.deleteMany();
-    // prisma.subcategory.deleteMany();
-    // prisma.deal.deleteMany();
+    // await prisma.product.deleteMany();
+    // await prisma.category.deleteMany();
+    // await  prisma.subcategory.deleteMany();
+    // await  prisma.deal.deleteMany();
 
     const newProduct = await prisma.$transaction(async (trans) => {
       var newProduct;
+      var categoryDb = await prisma.category.findUnique({ where: { title: category } })
+      var subcategoryDb = await prisma.subcategory.findUnique({ where: { title: subcategory } })
+      if (!categoryDb) { //If category or subcategory don't exist, make them, just in case
+        categoryDb = await trans.category.create({
+          data: {
+            title: category
+          }
+        })
+      }
+      if (!subcategoryDb) {
+        subcategoryDb = await trans.subcategory.create({
+          data: {
+            title: subcategory,
+            category: {
+              connect: { title: category }
+            }
+          }
+        })
+      }
+
       newProduct = await trans.product.upsert({
         where: {
           name,
@@ -115,137 +133,37 @@ app.post('/product', async (req, res) => {
         create: {
           name,
           barcode,
-          price
+          price,
+          category: {
+            connect: { title: category }
+          },
+          subcategory: {
+            connect: { title: subcategory }
+          }
         },
         update: {
-          categories: {
-            set: []
+          category: {
+            connect: { title: category }
+          },
+          subcategory: {
+            connect: { title: subcategory }
           },
           deals: {
-            set: []
+            connect: deals.map(deal => { return { description: deal.description } })
           }
         },
         include: {
-          categories: {
-            include: {
-              subcategories: true
-            }
-          },
+          category: true,
+          subcategory: true,
           deals: true
         }
       });
       console.log("Initializing Product");
-      newProduct = await trans.product.update({
-        where: {
-          name: name,
-          barcode: barcode
-        },
-        data: {
-          price,
-          categories: {
-            connectOrCreate: categories.map((category) => {
-              return {
-                where: { title: category.title },
-                create: {
-                  title: category.title,
-                  subcategories: {
-                    connectOrCreate: category.subcategories.map((subcategory) => {
-                      return {
-                        where: { title: subcategory.title },
-                        create: { title: subcategory.title }
-                      }
-                    })
-                  }
-                },
-              }
-            })
-
-          },
-          deals: {
-            connectOrCreate: deals.map((deal) => {
-              return {
-                where: {description: deal.description},
-                create: {description: deal.description, amount: deal.amount,total: deal.total}
-              }
-            })
-            
-            // set: deals.map((deal) => {
-            //   return {
-            //     description: deal.description,
-            //     amount: deal.amount,
-            //     total: deal.total
-            //   }
-            // })
-          }
-        },
-        include: {
-          categories: {
-            include: {
-              subcategories: true
-            }
-          },
-          deals: true
-        }
-      })
       return newProduct;
     });
     console.log(JSON.stringify(newProduct))
 
-
-    //  var categoriesDb = [];
-    //   for(var i=0; i < categories.length ; i++){
-    //     const category = categories[i];
-    //     categoriesDb.push(
-    //       await prisma.category.upsert({
-    //         where: {
-    //           title: category.title,  
-    //         },
-    //         update: {
-    //           subcategories: {
-    //             connectOrCreate: category.subcategories.map((subcategory) => {
-    //               return {
-    //                 where: {title: subcategory.title},
-    //                 create: {title: subcategory.title}
-    //               }
-    //             })
-    //           }
-    //         },
-    //         create: {
-    //           title: category.title,
-    //           subcategories: {
-    //             connectOrCreate: category.subcategories.map((subcategory) => {
-    //               return {
-    //                 where: {title: subcategory.title},
-    //                 create: {title: subcategory.title}
-    //               }
-    //             })
-    //           } 
-    //         }
-    //       })
-    //     )
-    //   }
-
-    // const newProduct = await prisma.product.upsert({
-    //   where:{
-    //     name: name,
-    //     barcode: barcode
-    //   },
-    //   update: {
-    //     price,
-    //     categories: {
-    //       connect: categoriesDb.map(category => ({title: category.title})) || [],
-    //     },
-    //   },
-    //   create: {
-    //     name,
-    //     barcode,
-    //     price,
-    //     categories: {
-    //       connect: categoriesDb.map(category => ({title: category.title})) || [],
-    //     },
-    //   },
-    // })
-    console.log(await prisma.category.findMany({ include: { products: true, subcategories: true } }))
+    console.log(await prisma.product.findMany({ include: { category: true, subcategory: true, deals: true } }))
     res.json(newProduct)
   } catch (error) {
     res.sendStatus(500)
