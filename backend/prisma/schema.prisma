@@ -33,7 +33,7 @@ model Subcategory {
   id         Int       @id @default(autoincrement())
   title      String    @unique
   category   Category  @relation(fields: [categoryId], references: [id])
-  categoryId Int       @unique
+  categoryId Int
   Product    Product[]
 }
 
