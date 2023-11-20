@@ -2,8 +2,8 @@ interface Product {
   name: string,
   barcode: string,
   price: number,
-  categories: Category[],
-  subcategories: Subcategory[]
+  category: Category,
+  subcategory: Subcategory
   deals: Deal[]
 }
 
@@ -22,4 +22,15 @@ interface Deal {
   total: number
 }
 
-export type { Product, Category, Subcategory, Deal }
+interface FormData {
+  barcode: string,
+  name: string,
+  price: number,
+  category: string,
+  subcategory: string,
+  deals?: Deal[]
+
+
+}
+
+export type { Product, Category, Subcategory, Deal, FormData }

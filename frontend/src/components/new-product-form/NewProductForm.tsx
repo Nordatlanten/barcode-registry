@@ -1,21 +1,24 @@
 import './NewProductForm.scss'
 import { useState } from 'react'
-import { Product, Category, Subcategory, Deal } from '../../types/ProductTypes'
+import { Product, Category, Subcategory, Deal, FormData } from '../../types/ProductTypes'
 import { postNewProduct } from '../../api/product-crud'
+import Input from '../input/Input'
 
 type NewProductFormProps = {
   barcode: string
 }
 
+
+
 function NewProductForm(props: NewProductFormProps) {
   const barcode = props.barcode
   const [name, setName] = useState("")
   const [price, setPrice] = useState(0)
-  const [categories, setCategories] = useState<Category[]>([])
-  const [subcategories, setSubcategories] = useState<Subcategory[]>([])
+  const [category, setCategory] = useState("")
+  const [subcategory, setSubcategory] = useState("")
   const [deals, setDeals] = useState<Deal[]>([])
   return (
-    <form className='new-product-form' onSubmit={(e) => postNewProduct(e, { barcode, name, price, categories, subcategories, deals })}>
+    <form className='new-product-form' onSubmit={(e) => postNewProduct(e, { barcode, name, price, category, subcategory, deals })}>
       <div>
         <p>Streckkod: {props.barcode}</p>
         <label>
@@ -28,11 +31,11 @@ function NewProductForm(props: NewProductFormProps) {
         </label>
         <label>
           <span>Kategori: </span>
-          <input onChange={(e) => setCategories([{ title: e.target.value }])} type="text" />
+          <input onChange={(e) => setCategory(e.target.value)} type="text" />
         </label>
         <label>
           <span>Subkategori: </span>
-          <input onChange={(e) => setSubcategories([{ title: e.target.value }])} type="text" />
+          <input onChange={(e) => setSubcategory(e.target.value)} type="text" />
         </label>
         <button type="submit">Lägg till</button>
       </div>

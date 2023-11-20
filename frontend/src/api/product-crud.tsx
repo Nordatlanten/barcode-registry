@@ -1,13 +1,17 @@
 import axios from "axios"
-import { Product } from "../types/ProductTypes"
+import { FormData } from "../types/ProductTypes"
 
-export const postNewProduct = async (e: React.FormEvent, body: Product) => {
+export const postNewProduct = async (e: React.FormEvent, body: FormData) => {
   e.preventDefault()
   console.log(body)
-  const result = await axios.post('http://localhost:3000/product', body, {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-  return result
+  try {
+    const result = await axios.post('http://localhost:3000/product', body, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    return result
+  } catch (error) {
+    console.log(error)
+  }
 }

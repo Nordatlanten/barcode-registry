@@ -1,7 +1,7 @@
 import './BarcodeSearch.scss'
 import { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
-import { Product, Category, Subcategory, Deal } from '../../types/ProductTypes'
+import { Product, Category } from '../../types/ProductTypes'
 import NewProductForm from '../new-product-form/NewProductForm'
 import ProductCard from '../product-card/ProductCard'
 const FETCH_WAIT_INTERVAL = 500
@@ -11,12 +11,8 @@ function BarcodeSearch() {
   const [barcode, setBarcode] = useState("")
   const [showNewProductForm, setShowNewProductForm] = useState(false)
   const [foundProduct, setFoundProduct] = useState<Product | null>()
-  const [name, setName] = useState("")
-  const [price, setPrice] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("")
-  const [categories, setCategories] = useState<Category[]>([])
-  const [foundCategories, setFoundCategories] = useState<Category[]>([])
 
+  const [foundCategories, setFoundCategories] = useState<Category[]>([])
 
   const textInputRef = useRef<HTMLInputElement>(null);
 
@@ -62,30 +58,6 @@ function BarcodeSearch() {
     }
   }
 
-  // const postNewProduct = async (e: React.FormEvent) => {
-  //   e.preventDefault()
-  //   const body = {
-  //     name,
-  //     price: parseInt(price),
-  //     barcode,
-  //     categories
-  //   }
-  //   const result = await axios.post('http://localhost:3000/product', body, {
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     }
-  //   })
-  //   setName("")
-  //   setPrice("")
-  //   setBarcode("")
-  //   setCategories([])
-  //   setSelectedCategory("")
-  //   setShowNewProductForm(false)
-  //   if (textInputRef.current) textInputRef.current.focus()
-  //   console.log(result)
-  // }
-
-
   return (
     <div className='barcode-search'>
       <div className='barcode-search__left-column'>
@@ -94,7 +66,7 @@ function BarcodeSearch() {
       </div>
       <div className="barcode-search__right-column">
         {foundProduct &&
-          <ProductCard name={foundProduct.name} barcode={foundProduct.barcode} price={foundProduct.price} categories={foundProduct.categories} subcategories={foundProduct.subcategories} deals={foundProduct.deals} />
+          <ProductCard name={foundProduct.name} barcode={foundProduct.barcode} price={foundProduct.price} category={foundProduct.category} subcategory={foundProduct.subcategory} deals={foundProduct.deals} />
         }
         {showNewProductForm &&
           <>
