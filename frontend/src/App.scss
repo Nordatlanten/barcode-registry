@@ -1,52 +1,6 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100%;
+  margin: 0;
   text-align: center;
-}
-
-.app-content {
   display: flex;
-  justify-content: center;
-  gap: 36px;
-
-  input {
-    padding: 12px 24px;
-  }
-
-  &__left-column {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    justify-content: flex-start;
-    text-align: left;
-  }
-
-  &__form-content {
-    display: flex;
-  }
-
-  &__product {
-    background-color: seashell;
-    border-radius: 1rem;
-    padding: 24px;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-  }
-
-  &__categories {
-    padding: 24px;
-    margin: 0;
-  }
-
-  &__subcategories {
-    padding: 24px;
-  }
-}
-
-label {
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
 }
