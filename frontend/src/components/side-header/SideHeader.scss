@@ -4,9 +4,15 @@
   padding: 24px;
 
   &__nav {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
     font-size: 0.8rem;
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
   }
 }

@@ -1,13 +1,29 @@
 import './Input.scss'
 import { Category, Subcategory } from '../../types/ProductTypes'
 
-type InputProps = {
-  type: 'text' | 'number' | 'typeahead',
-  placeholder: string,
+type InputProps = NumberProps | TextProps | TypeaheadProps
+
+type NumberProps = {
+  type: 'number',
+  placeholder?: string,
   label: string,
   id: string,
-  data?: Category[] | Subcategory[]
+}
 
+type TextProps = {
+  type: 'text',
+  placeholder?: string,
+  label: string,
+  id: string,
+}
+
+type TypeaheadProps = {
+  type: 'typeahead',
+  placeholder?: string,
+  label: string,
+  id: string,
+  data?: Category[] | Subcategory[],
+  fetchEndpoint?: 'categories' | 'subcategories' | 'deals'
 }
 
 function Input(props: InputProps) {
