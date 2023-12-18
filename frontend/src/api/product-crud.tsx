@@ -1,5 +1,19 @@
 import axios from "axios"
-import { FormData } from "../types/ProductTypes"
+import { Category, FormData } from "../types/ProductTypes"
+
+//GET
+
+export const getCategoriesMatchingQuery = async (query: string) => {
+  try {
+    const result = await axios.get(`http://localhost:3000/categories/${query}`)
+    return result
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+//POST
 
 export const postNewProduct = async (e: React.FormEvent, body: FormData) => {
   e.preventDefault()
@@ -10,7 +24,7 @@ export const postNewProduct = async (e: React.FormEvent, body: FormData) => {
         'Content-Type': 'application/json'
       }
     })
-    return result
+    return result.data
   } catch (error) {
     console.log(error)
   }

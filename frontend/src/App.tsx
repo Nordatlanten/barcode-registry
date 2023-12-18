@@ -3,14 +3,17 @@ import './App.scss'
 import { Outlet } from 'react-router-dom'
 import SideHeader from './components/side-header/SideHeader'
 
+import { ReduxProvider } from './redux/provider'
 
 function App() {
 
 
   return (
     <>
-      <SideHeader />
-      <Outlet />
+      <ReduxProvider>
+        <SideHeader />
+        <Outlet />
+      </ReduxProvider>
     </>
   )
 }
