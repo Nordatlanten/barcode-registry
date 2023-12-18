@@ -97,7 +97,6 @@ app.get('/categories/:query', async (req, res) => {
         }
       }
     }))
-    console.log(categories)
     res.status(200).json(categories)
   } catch (error) {
     console.error(error)
