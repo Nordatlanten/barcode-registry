@@ -88,6 +88,22 @@ app.get('/categories', async (req, res) => {
   res.status(200).json(categories)
 })
 
+app.get('/categories/:query', async (req, res) => {
+  try {
+    const categories = await prisma.category.findMany(({
+      where: {
+        title: {
+          contains: req.params.query
+        }
+      }
+    }))
+    console.log(categories)
+    res.status(200).json(categories)
+  } catch (error) {
+    console.error(error)
+  }
+})
+
 ////POST
 //Product
 app.post('/product', async (req, res) => {
