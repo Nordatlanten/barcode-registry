@@ -2,8 +2,11 @@
 import fs from "fs";
 import { execSync } from 'node:child_process';
 import * as readline from 'node:readline/promises';
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client';
+import os from 'os';
+
 const prisma = new PrismaClient();
+
 const inputReader = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -30,12 +33,22 @@ async function inputPrompt(prompt: string, yesFunction: Function, noFunction: Fu
 }
 
 async function resetDatabase() {
+    await prisma.$disconnect
     try {
         console.log("Resetting database.");
+        if (os.platform() === 'win32' && fs.existsSync("node_modules/.prisma/client")) {
+            console.log("Windows detected, and client data exists. Removing old client data to prevent access error.")
+            const execResultRm = execSync("rm -rf node_modules/.prisma/client", { stdio: 'inherit' });
+            console.log(execResultRm);
+        }
         const execResult = execSync("npx prisma db push --force-reset", { stdio: 'inherit' });
         console.log(execResult);
     } catch (error) {
         console.log("Error while resetting database: " + (error as Error).toString());
+        return 0;
+    }
+    finally {
+        await prisma.$connect
     }
     try {
         console.log("Generating client data.");
@@ -43,7 +56,13 @@ async function resetDatabase() {
         console.log(execResult);
     } catch (error) {
         console.log("Error while creating client data: " + (error as Error).toString());
+        return 0;
     }
+    finally {
+        await prisma.$connect
+    }
+    return 1;
+
 }
 
 async function seedDatabase() {
