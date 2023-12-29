@@ -16,9 +16,9 @@ model Product {
   barcode        String      @unique
   price          Int
   category       Category    @relation(fields: [categoryId], references: [id]) //categories    Category[]
-  categoryId     Int         @unique
+  categoryId     Int
   subcategory    Subcategory @relation(fields: [subcategoryInt], references: [id]) //subcategories Subcategory[]
-  subcategoryInt Int         @unique
+  subcategoryInt Int
   deals          Deal[]
 }
 
