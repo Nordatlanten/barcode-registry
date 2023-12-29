@@ -37,9 +37,42 @@ export const newProduct = createSlice({
           deals: state.value.deals
         }
       }
+    },
+    selectCategory: (state, action: PayloadAction<Category>) => {
+      return {
+        value: {
+          barcode: state.value.barcode,
+          price: state.value.price,
+          category: action.payload,
+          subcategory: state.value.subcategory,
+          deals: state.value.deals
+        }
+      }
+    },
+    selectSubcategory: (state, action: PayloadAction<Subcategory>) => {
+      return {
+        value: {
+          barcode: state.value.barcode,
+          price: state.value.price,
+          category: state.value.category,
+          subcategory: action.payload,
+          deals: state.value.deals
+        }
+      }
+    },
+    resetNewProductState: (state) => {
+      return {
+        value: {
+          barcode: "",
+          price: 0,
+          category: { title: "", subcategories: [] },
+          subcategory: { title: "" },
+          deals: []
+        }
+      }
     }
   }
 })
 
-export const { selectBarcode } = newProduct.actions
+export const { selectBarcode, selectCategory, selectSubcategory, resetNewProductState } = newProduct.actions
 export default newProduct.reducer

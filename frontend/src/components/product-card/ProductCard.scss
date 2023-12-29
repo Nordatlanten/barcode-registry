@@ -1,0 +1,16 @@
+.product-card {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  margin: 24px 0;
+  text-align: left;
+
+  &__title,
+  &__price {
+    text-align: center;
+  }
+
+  &__price {
+    font-size: 1.8rem;
+  }
+}
