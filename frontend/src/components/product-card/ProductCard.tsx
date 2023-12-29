@@ -6,11 +6,11 @@ import { Product } from '../../types/ProductTypes'
 function ProductCard(props: Product) {
   return (
     <div className='product-card'>
-      <h2>{props.name}</h2>
-      <p>{props.price}</p>
-      <p>{props.category.title}</p>
-      <p>{props.subcategory.title}</p>
-      {props.deals && <>
+      <h2 className='product-card__title'>{props.name}</h2>
+      <p className='product-card__price'>{props.price} SEK</p>
+      <p>Kategori: {props.category.title}</p>
+      <p>Subkategori: {props.subcategory.title}</p>
+      {props.deals && props.deals.length > 0 && <>
         <h3>Erbjudanden:</h3>
         {props.deals.map((deal, i) =>
           <li key={i}>
@@ -19,7 +19,7 @@ function ProductCard(props: Product) {
           </li>)}
       </>}
 
-    </div>
+    </div >
   )
 }
 

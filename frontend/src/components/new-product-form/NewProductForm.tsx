@@ -3,40 +3,57 @@ import { useState } from 'react'
 import { Product, Category, Subcategory, Deal, FormData } from '../../types/ProductTypes'
 import { postNewProduct } from '../../api/product-crud'
 import Input from '../input/Input'
+import Select from '../select/Select'
 
-type NewProductFormProps = {
-  barcode: string
+import { useDispatch } from "react-redux"
+import { useAppSelector, AppDispatch } from '../../redux/store'
+import { resetNewProductState } from '../../redux/features/newProductSlice'
+
+type NewProduct = {
+  barcode: string,
+  name: string,
+  price: number,
+  category: string,
+  subcategory: string,
+  deals: Deal[]
 }
 
 
 
-function NewProductForm(props: NewProductFormProps) {
-  const barcode = props.barcode
+
+
+function NewProductForm() {
+
+  const barcode = useAppSelector((state) => state.newProductReducer.value.barcode)
+  const category = useAppSelector((state) => state.newProductReducer.value.category)
   const [name, setName] = useState("")
   const [price, setPrice] = useState(0)
-  const [category, setCategory] = useState("")
+
   const [subcategory, setSubcategory] = useState("")
   const [deals, setDeals] = useState<Deal[]>([])
+
+  const dispatch = useDispatch<AppDispatch>()
+  const handleSubmit = (e: React.FormEvent, body: NewProduct) => {
+    e.preventDefault()
+    try {
+      postNewProduct(body)
+
+      dispatch(resetNewProductState())
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
   return (
-    <form className='new-product-form' onSubmit={(e) => postNewProduct(e, { barcode, name, price, category, subcategory, deals })}>
+    <form className='new-product-form' onSubmit={(e) => handleSubmit(e, { barcode, name, price, category: category.title, subcategory, deals })}>
       <div>
-        <p>Streckkod: {props.barcode}</p>
-        <label>
-          <span>Produktnamn: </span>
-          <input onChange={(e) => setName(e.target.value)} type="text" />
-        </label>
-        <label>
-          <span>Pris: </span>
-          <input onChange={(e) => setPrice(parseInt(e.target.value))} type="number" />
-        </label>
-        <label>
-          <span>Kategori: </span>
-          <input onChange={(e) => setCategory(e.target.value)} type="text" />
-        </label>
-        <label>
-          <span>Subkategori: </span>
-          <input onChange={(e) => setSubcategory(e.target.value)} type="text" />
-        </label>
+        <Input type='text' placeholder='Produktnamn' label='Produktnamn:' id='product-name-input' onChange={(e) => setName(e.target.value)} />
+        <Input type='number' id='price-input' label='Pris:' placeholder='Pris' onChange={(e) => setPrice(parseInt(e.target.value))} />
+        <Input type='typeahead' fetchEndpoint='categories' id='categories-input' label='Kategorier:' placeholder='Kategorier' />
+        {category.subcategories && category.subcategories.length > 0 &&
+          <Select label='Subkategorier:' id='subcategories-select' data={category.subcategories} onChange={(e) => setSubcategory(e.target.value)} />
+        }
         <button type="submit">Lägg till</button>
       </div>
     </form>

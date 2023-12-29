@@ -4,17 +4,26 @@ import axios from 'axios'
 import { Product, Category } from '../../types/ProductTypes'
 import NewProductForm from '../new-product-form/NewProductForm'
 import ProductCard from '../product-card/ProductCard'
+import Input from '../input/Input'
+
+import { useDispatch } from "react-redux"
+import { AppDispatch, useAppSelector } from '../../redux/store'
+import { selectBarcode } from '../../redux/features/newProductSlice'
+
 const FETCH_WAIT_INTERVAL = 500
 
 function BarcodeSearch() {
   const [timer, setTimer] = useState<NodeJS.Timeout>()
-  const [barcode, setBarcode] = useState("")
   const [showNewProductForm, setShowNewProductForm] = useState(false)
   const [foundProduct, setFoundProduct] = useState<Product | null>()
 
   const [foundCategories, setFoundCategories] = useState<Category[]>([])
 
   const textInputRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null)
+
+  const dispatch = useDispatch<AppDispatch>()
+  const barcode = useAppSelector((state) => state.newProductReducer.value.barcode)
 
   useEffect(() => {
 
@@ -33,7 +42,7 @@ function BarcodeSearch() {
   }
 
   const handleChange = async (string: string) => {
-    setBarcode(string)
+    dispatch(selectBarcode(string))
     if (string.length === 8 || string.length === 13) {
       clearTimeout(timer)
       setTimer(
@@ -52,27 +61,40 @@ function BarcodeSearch() {
     }
     if (string.length === 0) {
       clearTimeout(timer)
-      setBarcode("")
+      dispatch(selectBarcode(""))
       setFoundProduct(null)
       setShowNewProductForm(false)
     }
   }
 
+  const handleReset = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+    dispatch(selectBarcode(""))
+    setFoundProduct(null);
+    setShowNewProductForm(false)
+    if (textInputRef.current) {
+      textInputRef.current.value = ""
+      textInputRef.current.focus()
+    }
+  }
+
+
   return (
     <div className='barcode-search'>
-      <div className='barcode-search__left-column'>
-        <input ref={textInputRef} autoFocus value={barcode} onChange={e => handleChange(e.target.value)} />
-        <button onClick={() => { setBarcode(""); setFoundProduct(null); if (textInputRef.current) textInputRef.current.focus() }}>Rensa</button>
+      <div className='barcode-search__top-column'>
+        <form className='barcode-search__form' ref={formRef}>
+          <Input type='text' autoFocus placeholder='Scanna streckkod' label='Streckkod' id='barcode' onChange={e => handleChange(e.target.value)} ref={textInputRef} />
+          <button onClick={(e) => { handleReset(e) }}>Rensa</button>
+        </form>
       </div>
-      <div className="barcode-search__right-column">
+      <div className="barcode-search__bottom-column">
         {foundProduct &&
           <ProductCard name={foundProduct.name} barcode={foundProduct.barcode} price={foundProduct.price} category={foundProduct.category} subcategory={foundProduct.subcategory} deals={foundProduct.deals} />
         }
         {showNewProductForm &&
           <>
             <p>Produkt hittades inte...</p>
-            <p>Lägg till ny produkt:</p>
-            <NewProductForm barcode={barcode} />
+            <NewProductForm />
           </>
         }
       </div>

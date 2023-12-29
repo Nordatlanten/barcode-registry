@@ -12,11 +12,11 @@ function BarcodeSearchPage() {
   return (
     <Page title="Sök streckkod">
       <BarcodeSearch />
-      <Input type="typeahead" id="test" label="test" placeholder="test" />
+      {/* <Input type="typeahead" id="test" label="test" placeholder="test" />
       <button onClick={() => {
         dispatch(selectBarcode("LOOOOOOOL"))
       }}>Click to change barcode</button>
-      <p>{barcode}</p>
+      <p>{barcode}</p> */}
     </Page>
   )
 }

@@ -95,6 +95,9 @@ app.get('/categories/:query', async (req, res) => {
         title: {
           contains: req.params.query
         }
+      },
+      include: {
+        subcategories: true
       }
     }))
     res.status(200).json(categories)
@@ -102,6 +105,32 @@ app.get('/categories/:query', async (req, res) => {
     console.error(error)
   }
 })
+
+//Subcategories within category
+app.get('/categories/:category/:query', async (req, res) => {
+  try {
+    const subcategories = await prisma.category.findMany(({
+      where: {
+        title: {
+          contains: req.params.category
+        }
+      },
+      include: {
+        subcategories: {
+          where: {
+            title: {
+              contains: req.params.query
+            }
+          }
+        }
+      }
+    }))
+    res.status(200).json(subcategories)
+  } catch (error) {
+    console.error(error)
+  }
+})
+
 
 ////POST
 //Product
@@ -119,9 +148,9 @@ app.post('/product', async (req, res) => {
     // await  prisma.deal.deleteMany();
 
     const newProduct = await prisma.$transaction(async (trans) => {
-      var newProduct;
-      var categoryDb = await prisma.category.findUnique({ where: { title: category } })
-      var subcategoryDb = await prisma.subcategory.findUnique({ where: { title: subcategory } })
+      let newProduct;
+      let categoryDb = await prisma.category.findUnique({ where: { title: category } })
+      let subcategoryDb = await prisma.subcategory.findUnique({ where: { title: subcategory } })
       if (!categoryDb) { //If category or subcategory don't exist, make them, just in case
         categoryDb = await trans.category.create({
           data: {
