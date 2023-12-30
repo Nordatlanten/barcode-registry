@@ -148,9 +148,8 @@ app.post('/product', async (req, res) => {
     // await  prisma.deal.deleteMany();
 
     const newProduct = await prisma.$transaction(async (trans) => {
-      let newProduct;
-      let categoryDb = await prisma.category.findUnique({ where: { title: category } })
-      let subcategoryDb = await prisma.subcategory.findUnique({ where: { title: subcategory } })
+      let newProduct, categoryDb, subcategoryDb;
+      categoryDb = await prisma.category.findUnique({ where: { title: category } })
       if (!categoryDb) { //If category or subcategory don't exist, make them, just in case
         categoryDb = await trans.category.create({
           data: {
@@ -158,15 +157,18 @@ app.post('/product', async (req, res) => {
           }
         })
       }
-      if (!subcategoryDb) {
-        subcategoryDb = await trans.subcategory.create({
-          data: {
-            title: subcategory,
-            category: {
-              connect: { title: category }
+      if (subcategory) {
+        subcategoryDb = await prisma.subcategory.findUnique({ where: { title: subcategory } })
+        if (!subcategoryDb) {
+          subcategoryDb = await trans.subcategory.create({
+            data: {
+              title: subcategory,
+              category: {
+                connect: { title: category }
+              }
             }
-          }
-        })
+          })
+        }
       }
 
       newProduct = await trans.product.upsert({
@@ -181,17 +183,13 @@ app.post('/product', async (req, res) => {
           category: {
             connect: { title: category }
           },
-          subcategory: {
-            connect: { title: subcategory }
-          }
+          subcategory: subcategory ? { connect: { title: subcategory } } : undefined,
         },
         update: {
           category: {
             connect: { title: category }
           },
-          subcategory: {
-            connect: { title: subcategory }
-          },
+          subcategory: subcategory ? { connect: { title: subcategory } } : undefined,
           deals: {
             connect: deals.map(deal => { return { description: deal.description } })
           }
