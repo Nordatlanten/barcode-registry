@@ -11,14 +11,14 @@ datasource db {
 }
 
 model Product {
-  id             Int         @id @default(autoincrement())
-  name           String      @unique
-  barcode        String      @unique
+  id             Int          @id @default(autoincrement())
+  name           String       @unique
+  barcode        String       @unique
   price          Int
-  category       Category    @relation(fields: [categoryId], references: [id]) //categories    Category[]
+  category       Category     @relation(fields: [categoryId], references: [id]) //categories    Category[]
   categoryId     Int
-  subcategory    Subcategory @relation(fields: [subcategoryInt], references: [id]) //subcategories Subcategory[]
-  subcategoryInt Int
+  subcategory    Subcategory? @relation(fields: [subcategoryInt], references: [id]) //subcategories Subcategory[]
+  subcategoryInt Int?
   deals          Deal[]
 }
 
