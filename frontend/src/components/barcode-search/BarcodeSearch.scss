@@ -17,6 +17,7 @@
     }
   }
 
+
   &__top-column {
     display: flex;
     flex-direction: column;
@@ -37,7 +38,15 @@
   &__form {
     width: 100%;
     display: flex;
+    gap: 12px;
     flex-direction: column;
+    align-items: center;
+  }
+
+
+
+  &__reset-button {
+    max-width: 200px;
   }
 }
 

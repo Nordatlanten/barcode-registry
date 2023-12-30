@@ -1,7 +1,8 @@
 .side-header {
-  background-color: #ccc;
+  background-color: hotpink;
   height: 100vh;
   padding: 24px;
+  width: 16vw;
 
   &__nav {
     font-size: 0.8rem;
@@ -14,5 +15,14 @@
       flex-direction: column;
       gap: 12px;
     }
+  }
+
+  a,
+  a:visited {
+    color: #333;
+  }
+
+  a:hover {
+    color: #666;
   }
 }

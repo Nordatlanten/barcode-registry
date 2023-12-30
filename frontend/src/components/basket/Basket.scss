@@ -1,0 +1,48 @@
+.basket {
+  width: 20vw;
+  position: relative;
+
+  &__list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    gap: 12px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 24px 0;
+  }
+
+  &__button-panel {
+    display: flex;
+    gap: 12px;
+    padding: 0 12px;
+    font-size: 0.8rem;
+
+    button {
+      padding: 8px 6px;
+    }
+  }
+
+  .basket-item:nth-child(odd) {
+    background: white;
+  }
+
+  .basket-item:nth-child(even) {
+    background: pink;
+  }
+
+  &__empty-basket-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 0.8rem;
+  }
+}

@@ -1,3 +1,10 @@
 .new-product-form {
   width: 100%;
+
+  &__input-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
 }

@@ -8,6 +8,7 @@ import Select from '../select/Select'
 import { useDispatch } from "react-redux"
 import { useAppSelector, AppDispatch } from '../../redux/store'
 import { resetNewProductState } from '../../redux/features/newProductSlice'
+import { hideNewProductForm } from '../../redux/features/applicationControlSlice'
 
 type NewProduct = {
   barcode: string,
@@ -18,12 +19,7 @@ type NewProduct = {
   deals: Deal[]
 }
 
-
-
-
-
 function NewProductForm() {
-
   const barcode = useAppSelector((state) => state.newProductReducer.value.barcode)
   const category = useAppSelector((state) => state.newProductReducer.value.category)
   const [name, setName] = useState("")
@@ -33,12 +29,13 @@ function NewProductForm() {
   const [deals, setDeals] = useState<Deal[]>([])
 
   const dispatch = useDispatch<AppDispatch>()
+
   const handleSubmit = (e: React.FormEvent, body: NewProduct) => {
     e.preventDefault()
     try {
       postNewProduct(body)
-
       dispatch(resetNewProductState())
+      dispatch(hideNewProductForm())
     } catch (error) {
       console.log(error)
     }
@@ -47,7 +44,7 @@ function NewProductForm() {
 
   return (
     <form className='new-product-form' onSubmit={(e) => handleSubmit(e, { barcode, name, price, category: category.title, subcategory, deals })}>
-      <div>
+      <div className='new-product-form__input-field'>
         <Input type='text' placeholder='Produktnamn' label='Produktnamn:' id='product-name-input' onChange={(e) => setName(e.target.value)} />
         <Input type='number' id='price-input' label='Pris:' placeholder='Pris' onChange={(e) => setPrice(parseInt(e.target.value))} />
         <Input type='typeahead' fetchEndpoint='categories' id='categories-input' label='Kategorier:' placeholder='Kategorier' />

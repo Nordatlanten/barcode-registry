@@ -8,9 +8,11 @@
   &__title,
   &__price {
     text-align: center;
+    margin: 12px;
   }
 
   &__price {
+    padding: 6px;
     font-size: 1.8rem;
   }
 }

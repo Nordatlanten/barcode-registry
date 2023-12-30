@@ -3,7 +3,8 @@
   flex-direction: column;
   align-items: left;
   gap: 12px;
-  padding: 12px;
+  max-width: 500px;
+  width: 100%;
 
   input {
     border: none;
@@ -38,13 +39,13 @@
 
       position: absolute;
       inset: 0;
-      top: 100%;
+      top: 73%;
       left: -29px;
       z-index: 10;
       max-height: 33rem;
       will-change: filter;
       filter: drop-shadow(6px 6px 6px rgba(0, 0, 0, 0.3));
-      width: 100%;
+      width: calc(100% + 18px);
 
       li {
         background-color: #fff;

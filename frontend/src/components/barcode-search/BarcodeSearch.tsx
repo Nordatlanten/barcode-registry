@@ -9,14 +9,14 @@ import Input from '../input/Input'
 import { useDispatch } from "react-redux"
 import { AppDispatch, useAppSelector } from '../../redux/store'
 import { selectBarcode } from '../../redux/features/newProductSlice'
+import { addProductToBasket } from '../../redux/features/basketSlice'
+import { hideNewProductForm, showNewProductForm } from '../../redux/features/applicationControlSlice'
 
 const FETCH_WAIT_INTERVAL = 500
 
 function BarcodeSearch() {
   const [timer, setTimer] = useState<NodeJS.Timeout>()
-  const [showNewProductForm, setShowNewProductForm] = useState(false)
   const [foundProduct, setFoundProduct] = useState<Product | null>()
-
   const [foundCategories, setFoundCategories] = useState<Category[]>([])
 
   const textInputRef = useRef<HTMLInputElement>(null);
@@ -24,7 +24,7 @@ function BarcodeSearch() {
 
   const dispatch = useDispatch<AppDispatch>()
   const barcode = useAppSelector((state) => state.newProductReducer.value.barcode)
-
+  const displayNewProductForm = useAppSelector((state) => state.applicationControlSlice.value.displayNewProductForm)
   useEffect(() => {
 
     const getCategories = async () => {
@@ -50,10 +50,11 @@ function BarcodeSearch() {
           const product = await findProduct(string) as Product
           if (product) {
             setFoundProduct(product)
+            dispatch(addProductToBasket(product))
           }
           else {
             setFoundProduct(null)
-            setShowNewProductForm(true)
+            dispatch(showNewProductForm())
           }
         }, FETCH_WAIT_INTERVAL
         )
@@ -63,7 +64,7 @@ function BarcodeSearch() {
       clearTimeout(timer)
       dispatch(selectBarcode(""))
       setFoundProduct(null)
-      setShowNewProductForm(false)
+      dispatch(hideNewProductForm())
     }
   }
 
@@ -71,7 +72,7 @@ function BarcodeSearch() {
     e.preventDefault()
     dispatch(selectBarcode(""))
     setFoundProduct(null);
-    setShowNewProductForm(false)
+    dispatch(hideNewProductForm())
     if (textInputRef.current) {
       textInputRef.current.value = ""
       textInputRef.current.focus()
@@ -83,15 +84,15 @@ function BarcodeSearch() {
     <div className='barcode-search'>
       <div className='barcode-search__top-column'>
         <form className='barcode-search__form' ref={formRef}>
-          <Input type='text' autoFocus placeholder='Scanna streckkod' label='Streckkod' id='barcode' onChange={e => handleChange(e.target.value)} ref={textInputRef} />
-          <button onClick={(e) => { handleReset(e) }}>Rensa</button>
+          <Input type='text' autoFocus placeholder='Scanna streckkod' label='Streckkod:' id='barcode' onChange={e => handleChange(e.target.value)} ref={textInputRef} />
+          <button className='barcode-search__reset-button' onClick={(e) => { handleReset(e) }}>Rensa</button>
         </form>
       </div>
       <div className="barcode-search__bottom-column">
         {foundProduct &&
           <ProductCard name={foundProduct.name} barcode={foundProduct.barcode} price={foundProduct.price} category={foundProduct.category} subcategory={foundProduct.subcategory} deals={foundProduct.deals} />
         }
-        {showNewProductForm &&
+        {displayNewProductForm &&
           <>
             <p>Produkt hittades inte...</p>
             <NewProductForm />
