@@ -1,133 +1,133 @@
 {
     "categories": [
         {
-            "title": "Mejeri - Dairy"
+            "title": "Mejeri"
         },
         {
-            "title": "Godis - Candy"
+            "title": "Godis"
         },
         {
-            "title": "Dricka - Drinks"
+            "title": "Dricka"
         },
         {
-            "title": "Kem & Teknik - Chem & Tech"
+            "title": "Kem & Teknik"
         },
         {
-            "title": "Tobak - Tobacco"
+            "title": "Tobak"
         },
         {
-            "title": "Frukt - Fruit"
+            "title": "Frukt"
         },
         {
-            "title": "Telefonkort - Phone Cards"
+            "title": "Telefonkort"
         },
         {
-            "title": "Övrigt - Miscellaneous"
+            "title": "Övrigt"
         },
         {
-            "title": "Livs - Groceries"
+            "title": "Livs"
         }
     ],
     "subcategories": [
         {
-            "title": "Hygienartiklar - Hygiene products",
-            "category": "Kem & Teknik - Chem & Tech"
+            "title": "Hygienartiklar",
+            "category": "Kem & Teknik"
         },
         {
-            "title": "Kaffe - Coffee",
-            "category": "Livs - Groceries"
+            "title": "Kaffe",
+            "category": "Livs"
         },
         {
-            "title": "Husdjur - Pets",
-            "category": "Övrigt - Miscellaneous"
+            "title": "Husdjur",
+            "category": "Övrigt"
         },
         {
-            "title": "Mat - Food",
-            "category": "Livs - Groceries"
+            "title": "Mat",
+            "category": "Livs"
         },
         {
-            "title": "Öl & cider - Beer & cider",
-            "category": "Dricka - Drinks"
+            "title": "Öl & cider",
+            "category": "Dricka"
         },
         {
-            "title": "Snacks - Snacks",
-            "category": "Livs - Groceries"
+            "title": "Snacks",
+            "category": "Livs"
         },
         {
-            "title": "Vykort - Postcard",
-            "category": "Övrigt - Miscellaneous"
+            "title": "Vykort",
+            "category": "Övrigt"
         },
         {
-            "title": "Choklad - Chocolate",
-            "category": "Godis - Candy"
+            "title": "Choklad",
+            "category": "Godis"
         },
         {
-            "title": "Snackbars - Snack bars",
-            "category": "Godis - Candy"
+            "title": "Snackbars",
+            "category": "Godis"
         },
         {
-            "title": "Godispåsar, tabletter, kakor - Candy bags, tablets, cookies",
-            "category": "Godis - Candy"
+            "title": "Godispåsar, tabletter, kakor",
+            "category": "Godis"
         },
         {
-            "title": "Smågodis - Small sweets",
-            "category": "Godis - Candy"
+            "title": "Smågodis",
+            "category": "Godis"
         },
         {
-            "title": "Medicin, vård & intim - Medicine, care & intimate",
-            "category": "Kem & Teknik - Chem & Tech"
+            "title": "Medicin, vård & intim",
+            "category": "Kem & Teknik"
         },
         {
-            "title": "Verktyg - Tool",
-            "category": "Livs - Groceries"
+            "title": "Verktyg",
+            "category": "Livs"
         },
         {
-            "title": "Snus - Snuff",
-            "category": "Tobak - Tobacco"
+            "title": "Snus",
+            "category": "Tobak"
         },
         {
-            "title": "Cigaretter - Cigarettes",
-            "category": "Tobak - Tobacco"
+            "title": "Cigaretter",
+            "category": "Tobak"
         },
         {
-            "title": "Övrig tobak - Other tobacco",
-            "category": "Tobak - Tobacco"
+            "title": "Övrig tobak",
+            "category": "Tobak"
         },
         {
-            "title": "Batterier - Batteries",
-            "category": "Kem & Teknik - Chem & Tech"
+            "title": "Batterier",
+            "category": "Kem & Teknik"
         },
         {
-            "title": "Leksaker - Toys",
-            "category": "Övrigt - Miscellaneous"
+            "title": "Leksaker",
+            "category": "Övrigt"
         },
         {
-            "title": "Kemikalier - Chemicals",
-            "category": "Kem & Teknik - Chem & Tech"
+            "title": "Kemikalier",
+            "category": "Kem & Teknik"
         },
         {
-            "title": "Elartiklar - Electrical items",
-            "category": "Kem & Teknik - Chem & Tech"
+            "title": "Elartiklar",
+            "category": "Kem & Teknik"
         },
         {
-            "title": "Glass - Ice cream",
-            "category": "Godis - Candy"
+            "title": "Glass",
+            "category": "Godis"
         },
         {
-            "title": "Kök, badrum & städ - Kitchen, bathroom & cleaning",
-            "category": "Övrigt - Miscellaneous"
+            "title": "Kök, badrum & städ",
+            "category": "Övrigt"
         },
         {
-            "title": "Frysmat - Frozen food",
-            "category": "Livs - Groceries"
+            "title": "Frysmat",
+            "category": "Livs"
         },
         {
-            "title": "Frimärke och kuvert - Stamp and envelope",
-            "category": "Övrigt - Miscellaneous"
+            "title": "Frimärke och kuvert",
+            "category": "Övrigt"
         },
         {
-            "title": "Speciella artiklar - Special articles",
-            "category": "Övrigt - Miscellaneous"
+            "title": "Speciella artiklar",
+            "category": "Övrigt"
         }
     ]
 }
