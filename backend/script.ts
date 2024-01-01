@@ -260,7 +260,7 @@ app.post('/deal', async (req, res) => {
     console.log(error)
   }
 });
-// delete a deal from a products (I'll add it later, for now just re-send the deal with a products array minus the product you don't want)
+// delete a deal from a products (I'll add it later, for now just re-send the deal with a products array minus the product you don't want and it'll re-set the relations)
 
 // delete a deal (remove from all products)
 app.delete('/deal', async (req, res) => {
