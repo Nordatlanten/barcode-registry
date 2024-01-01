@@ -216,6 +216,122 @@ app.post('/product', async (req, res) => {
 ////DELETE
 //Product by barcode
 
+// create a deal, add a description, add the amount and total, then add specific products to the deals
+app.post('/deal', async (req, res) => {
+  try {
+    console.log(req.body)
+    const description: string = req.body.description
+    const amount: number = req.body.amount
+    const total: number = req.body.total
+    const filter: string = req.body.filter
+    const products: Product[] = req.body.products ? req.body.products : []
+
+    const newDeal = await prisma.$transaction(async (trans) => {
+      console.log("Creating or updating deal");
+      return await trans.deal.upsert({
+        where: {
+          description,
+        },
+        create: {
+          description,
+          amount,
+          total,
+          filter,
+          products: { connect: products.map(product => { return { name: product.name } }) }
+        },
+        update: {
+          amount,
+          total,
+          filter,
+          products: { set: products.map(product => { return { name: product.name } }) }
+        },
+        include: {
+          products: true,
+        }
+      });
+
+    });
+    console.log(JSON.stringify(newDeal))
+
+    console.log(await prisma.deal.findMany({ include: { products: true, } }))
+    res.json(newDeal)
+  } catch (error) {
+    res.sendStatus(500)
+    console.log(error)
+  }
+});
+// delete a deal from a products (I'll add it later, for now just re-send the deal with a products array minus the product you don't want)
+
+// delete a deal (remove from all products)
+app.delete('/deal', async (req, res) => {
+  try {
+    console.log(req.body)
+    const description: string = req.body.description
+
+    const newDeal = await prisma.$transaction(async (trans) => {
+      console.log("Deleting deal");
+      return await trans.deal.delete({
+        where: {
+          description,
+        }
+      })
+    });
+    console.log(JSON.stringify(newDeal))
+
+    console.log(await prisma.deal.findMany({ include: { products: true, } }))
+    res.json(newDeal)
+  } catch (error) {
+    res.sendStatus(500)
+    console.log(error)
+  }
+});
+
+// get all deals
+app.get('/deals', async (req, res) => {
+  try {
+    const deals = await prisma.deal.findMany(({
+      include: {
+        products: true
+      }
+    }))
+    res.status(200).json(deals)
+  } catch (error) {
+    res.sendStatus(500)
+    console.log(error)
+  }
+});
+
+// given a list of products, get deals on products
+app.get('/products/deals', async (req, res) => {
+  try {
+    console.log(req.body)
+    const products: Product[] = req.body.products ? req.body.products : []
+
+    const deals = await prisma.deal.findMany(({
+      where: {
+        OR: [
+          {
+            products: {
+              every: {
+                // name: products.map(product => { return { product.name } })
+              }
+            }
+          }
+        ]
+      },
+      include: {
+        products: true
+      }
+    }))
+
+    console.log(JSON.stringify(deals))
+
+    res.json(deals)
+  } catch (error) {
+    res.sendStatus(500)
+    console.log(error)
+  }
+});
 
 
 const server = app.listen(3000, () => {
