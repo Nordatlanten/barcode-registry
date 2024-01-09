@@ -59,6 +59,7 @@ function BarcodeSearch() {
           else {
             setFoundProduct(null)
             dispatch(showNewProductForm())
+            dispatch(selectBarcode(string))
             setQuery("")
           }
         }, FETCH_WAIT_INTERVAL

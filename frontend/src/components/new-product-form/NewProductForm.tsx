@@ -10,20 +10,21 @@ import { useAppSelector, AppDispatch } from '../../redux/store'
 import { resetNewProductState } from '../../redux/features/newProductSlice'
 import { hideNewProductForm } from '../../redux/features/applicationControlSlice'
 
-
 function NewProductForm() {
-  const barcode = useAppSelector((state) => state.newProductReducer.value.barcode)
   const category = useAppSelector((state) => state.newProductReducer.value.category)
+  const barcode = useAppSelector((state) => state.newProductReducer.value.barcode)
   const [name, setName] = useState("")
   const [price, setPrice] = useState(0)
 
   const [subcategory, setSubcategory] = useState("")
   const [deals, setDeals] = useState<Deal[]>([])
 
+
   const dispatch = useDispatch<AppDispatch>()
 
   const handleSubmit = (e: React.FormEvent, body: NewProduct) => {
     e.preventDefault()
+    console.log(body)
     try {
       postNewProduct(body)
       dispatch(resetNewProductState())
