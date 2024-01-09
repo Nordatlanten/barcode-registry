@@ -24,6 +24,7 @@ type TextProps = {
   placeholder?: string,
   label: string,
   id: string,
+  value?: string,
   autoFocus?: boolean,
   onChange?: React.ChangeEventHandler<HTMLInputElement>
 }
@@ -103,6 +104,7 @@ const Input = forwardRef((props: InputProps, ref: React.LegacyRef<HTMLInputEleme
       <div className="input input--text">
         <label htmlFor={props.id}>{props.label}</label>
         <input
+          value={props.value}
           ref={ref}
           autoFocus={props.autoFocus && true}
           id={props.id}

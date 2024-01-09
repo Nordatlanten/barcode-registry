@@ -1,6 +1,6 @@
 import './NewProductForm.scss'
 import { useState } from 'react'
-import { Product, Category, Subcategory, Deal, FormData } from '../../types/ProductTypes'
+import { Product, Category, Subcategory, Deal, FormData, NewProduct } from '../../types/ProductTypes'
 import { postNewProduct } from '../../api/product-crud'
 import Input from '../input/Input'
 import Select from '../select/Select'
@@ -10,14 +10,6 @@ import { useAppSelector, AppDispatch } from '../../redux/store'
 import { resetNewProductState } from '../../redux/features/newProductSlice'
 import { hideNewProductForm } from '../../redux/features/applicationControlSlice'
 
-type NewProduct = {
-  barcode: string,
-  name: string,
-  price: number,
-  category: string,
-  subcategory: string,
-  deals: Deal[]
-}
 
 function NewProductForm() {
   const barcode = useAppSelector((state) => state.newProductReducer.value.barcode)

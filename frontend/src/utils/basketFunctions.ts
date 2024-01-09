@@ -1,0 +1,12 @@
+import { Product } from "../types/ProductTypes";
+
+export const groupBy = <T, K extends keyof any>(arr: T[], key: (i: T) => K) =>
+  arr.reduce((groups, item) => {
+    (groups[key(item)] ||= []).push(item);
+    return groups;
+  }, {} as Record<K, T[]>);
+
+export const checkBasketForItem = (item: Product, basket: Product[]) => {
+  const entriesOfCandyInBasket = basket.filter(x => x == item)
+  return entriesOfCandyInBasket
+}

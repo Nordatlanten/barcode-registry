@@ -12,15 +12,16 @@ import { selectBarcode } from '../../redux/features/newProductSlice'
 import { addProductToBasket } from '../../redux/features/basketSlice'
 import { hideNewProductForm, showNewProductForm } from '../../redux/features/applicationControlSlice'
 
-const FETCH_WAIT_INTERVAL = 500
+const FETCH_WAIT_INTERVAL = 800
 
 function BarcodeSearch() {
   const [timer, setTimer] = useState<NodeJS.Timeout>()
   const [foundProduct, setFoundProduct] = useState<Product | null>()
   const [foundCategories, setFoundCategories] = useState<Category[]>([])
-
+  const [query, setQuery] = useState("")
   const textInputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null)
+
 
   const dispatch = useDispatch<AppDispatch>()
   const barcode = useAppSelector((state) => state.newProductReducer.value.barcode)
@@ -42,7 +43,7 @@ function BarcodeSearch() {
   }
 
   const handleChange = async (string: string) => {
-    dispatch(selectBarcode(string))
+    setQuery(string)
     if (string.length === 8 || string.length === 13) {
       clearTimeout(timer)
       setTimer(
@@ -50,11 +51,15 @@ function BarcodeSearch() {
           const product = await findProduct(string) as Product
           if (product) {
             setFoundProduct(product)
+            dispatch(selectBarcode(string))
             dispatch(addProductToBasket(product))
+            dispatch(hideNewProductForm())
+            setQuery("")
           }
           else {
             setFoundProduct(null)
             dispatch(showNewProductForm())
+            setQuery("")
           }
         }, FETCH_WAIT_INTERVAL
         )
@@ -84,7 +89,7 @@ function BarcodeSearch() {
     <div className='barcode-search'>
       <div className='barcode-search__top-column'>
         <form className='barcode-search__form' ref={formRef}>
-          <Input type='text' autoFocus placeholder='Scanna streckkod' label='Streckkod:' id='barcode' onChange={e => handleChange(e.target.value)} ref={textInputRef} />
+          <Input type='text' autoFocus value={query} placeholder='Scanna streckkod' label='Streckkod:' id='barcode' onChange={e => handleChange(e.target.value)} ref={textInputRef} />
           <button className='barcode-search__reset-button' onClick={(e) => { handleReset(e) }}>Rensa</button>
         </form>
       </div>
