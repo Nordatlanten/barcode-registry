@@ -3,7 +3,7 @@ interface Product {
   barcode: string,
   price: number,
   category: Category,
-  subcategory: Subcategory
+  subcategory?: Subcategory
   deals: Deal[]
 }
 

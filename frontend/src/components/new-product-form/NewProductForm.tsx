@@ -37,6 +37,7 @@ function NewProductForm() {
 
   return (
     <form className='new-product-form' onSubmit={(e) => handleSubmit(e, { barcode, name, price, category: category.title, subcategory, deals })}>
+      <p>Streckkod: <b>{barcode}</b></p>
       <div className='new-product-form__input-field'>
         <Input type='text' placeholder='Produktnamn' label='Produktnamn:' id='product-name-input' onChange={(e) => setName(e.target.value)} />
         <Input type='number' id='price-input' label='Pris:' placeholder='Pris' onChange={(e) => setPrice(parseInt(e.target.value))} />

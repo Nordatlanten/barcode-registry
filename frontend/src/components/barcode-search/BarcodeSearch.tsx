@@ -65,6 +65,8 @@ function BarcodeSearch() {
         }, FETCH_WAIT_INTERVAL
         )
       )
+    } else {
+      clearTimeout(timer)
     }
     if (string.length === 0) {
       clearTimeout(timer)
